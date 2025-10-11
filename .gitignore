@@ -1,0 +1,16 @@
+# 操作系统杂项
+.DS_Store
+Thumbs.db
+
+# Obsidian 易变UI/缓存
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/app.json
+.obsidian/appearance.json
+.obsidian/cache/
+
+# Obsidian 回收站
+.trash/
+
+# 插件可能存放令牌/密钥（避免把API Key提交上去）
+.obsidian/plugins/*/data.json
