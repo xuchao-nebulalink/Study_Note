@@ -441,3 +441,37 @@ GPIO的强大之处在于，它们不仅仅是简单的I/O口，每个引脚大�
     - 应用：读取电位器（可调电阻）的旋钮位置、测量光敏电阻的亮度、读取各类模拟传感器的数值。
         
     - 例如：PA0 可以复用为 ADC12_IN0。
+    -
+
+
+
+# 学 STM32：软件安装与必做事项（简明版）
+
+## 1）安装 Keil
+
+- 安装 `MDK-ARM`，注册（可用免费 **MDK-Lite**，但**32KB 代码大小限制**）。
+    
+- 打开 **uVision**，别急着建工程，先装设备包。
+    
+
+## 2）在 Keil 里安装 **对应芯片的设备包（DFP）**
+
+- 进 **Pack Installer**（菜单：`File → Pack Installer`）。
+![[Pasted image 20251013001114.png]]
+- 左侧选 `STMicroelectronics`，在中间列表找到你用的系列（如 **STM32F1 Series**）。
+    
+- 右侧 **Install**：
+    
+    - **CMSIS → CORE**（必装）
+    - **Device → STM32F1xx_DFP**（或你的系列 DFP，**必装**）
+    - 需要 HAL/LL 就装 **STM32Cube HAL/LL** 组件
+- 安装后能看到一堆 **Examples**，后面建工程很方便。 
+
+## 3）安装/验证 **ST-LINK 驱动**（很关键）
+![[Pasted image 20251013001211.png]]
+![[Pasted image 20251013001241.png]]
+
+
+## 4）安装**串口驱动**（若用串口日志）
+![[Pasted image 20251013001404.png]]
+![[Pasted image 20251013001416.png]]
