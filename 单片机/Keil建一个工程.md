@@ -27,6 +27,7 @@
 - 点击 OK。
 
 ![[Pasted image 20251013013844.png]]
+
 **第三步：管理运行时环境 (Manage Run-Time Environment)**
 
 - 这个窗口是 Keil 5 的核心功能之一，用于管理软件包 (Software Packs)。
@@ -47,6 +48,16 @@
 - `RTE_Components.h`
 - `scatter file (.sct)`
 
+
+==**如果不配置管理运行时环境 (Manage Run-Time Environment)**==
+项目是一个空的
+![[Pasted image 20251013102529.png]]
+这样需要添加一些工程的必要文件
+- **1.stm32的启动文件**，stm32的程序就是从这些启动文件开始执行的
+![[Pasted image 20251013102713.png]]
+![[Pasted image 20251013113104.png]]
+> 在项目中新建一个文件夹，比如叫Start，然后把这些文件放到该目录下
+![[Pasted image 20251013113125.png]]
 
 ## 2. 工程里“必备文件”到底有哪些？
 
