@@ -106,3 +106,8 @@ git config user.name "YourGitLabUsername"
 ---
 
 注意：如果gitlab需要指定的话比如是192.168.4.21需要在config文件中修改。吧gitlab.com修改成192.168.4.21即可
+
+
+
+gittee如何出现要输入密码的操作：
+设置成ssh的：git remote set-url origin git@gitee.com:username/repository.git
