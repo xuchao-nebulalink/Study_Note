@@ -65,7 +65,6 @@ services:
       - ./pg_data:/var/lib/postgresql/data
 ```
 
-解释
 
 ---
 
