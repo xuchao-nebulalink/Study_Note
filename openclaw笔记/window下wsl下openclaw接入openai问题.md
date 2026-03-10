@@ -14,6 +14,11 @@
 ## 💡 破案时刻与终极解法
 经过层层扒皮，最后发现居然是**系统底层路由打架**了！罪魁祸首竟然是用来优化网络的 `networkingMode=mirrored`。
 
+```
+node -e "fetch('https://auth.openai.com').then(r=>console.log('✅ Node.js 连通了！状态码:', r.status)).catch(e=>console.error('❌ 还是连不上，报错:', e.message))"
+```
+输出是：✅ Node.js 连通了就ok
+
 **最终解决步骤：**
 1. **斩断镜像网络**：打开 `C:\Users\<用户名>\.wslconfig`，果断把 `networkingMode=mirrored` 删掉（或改成注释 `#networkingMode=mirrored`），让 WSL 强制回退到传统的 NAT 模式。
 2. **彻底重启 WSL**：在 PowerShell 执行 `wsl --shutdown`。
