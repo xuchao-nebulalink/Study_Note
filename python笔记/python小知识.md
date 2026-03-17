@@ -60,82 +60,76 @@ pyenv install 3.12.10
 ---
 
 
-# 🐧 Linux (WSL) vs 🪟 Windows：Python 虚拟环境对比指南
 
-> **💡 核心要点：**
-> 无论什么系统，推荐的虚拟环境文件夹名称统一为 `.venv`（注意前面有个点）。
-> 核心模块都是内置的 `venv`，区别主要在于系统的终端路径和脚本调用方式。
+
+# 🐍 Python 虚拟环境与包管理极简笔记 (Linux & Windows)
+
+**统一规范**：推荐将虚拟环境统一命名为 `.venv`（隐藏文件夹，各大编辑器默认识别）。
 
 ---
 
-## 🐧 一、Linux / macOS (包括 WSL) 下的操作
+## 🐧 一、 Linux / macOS (WSL)
 
-Linux 和 macOS 使用基于 Bash/Zsh 的终端，激活脚本存放在虚拟环境的 `bin/` 目录下。
-
-### 1. 创建虚拟环境
+### 1. 创建与激活
 ```bash
-# 默认写法
+# 1. 创建虚拟环境 (如指定版本可将 python 替换为 python3.12)
 python -m venv .venv
 
-# 如果你的系统需要区分 python2 和 python3，请用：
-python3 -m venv .venv
-
-
-### 2. 激活虚拟环境
-```bash
+# 2. 激活环境
 source .venv/bin/activate
+### 2. 验证环境是否生效
+```bash
+which python
+which pip
 ```
-*(激活成功后，命令行开头会出现 `(.venv)` 提示符)*
+> **✅ 正确输出**：两者的路径都必须包含当前目录的 `.venv`。
+> **❌ 错误输出**：如果 `which pip` 指向了全局（如 `~/.pyenv/shims/pip` 或 `/usr/bin/pip`），说明环境有问题，请看下文的“防坑绝招”。
 
-### 3. 退出虚拟环境
+---
+
+## 🪟 二、 Windows
+
+### 1. 创建与激活
+```powershell
+# 1. 创建虚拟环境
+python -m venv .venv
+
+# 2. 激活环境 (PowerShell 终端)
+.venv\Scripts\activate
+```
+> **⚠️ PowerShell 报错“禁止运行脚本”解决办法**：
+> 以管理员身份打开 PowerShell，执行一次：`Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`，输入 `Y` 确认，之后即可永久正常激活。
+
+### 2. 验证环境是否生效
+```powershell
+where python
+where pip
+```
+> 同样，输出的路径首行必须是你项目下的 `.venv` 文件夹。
+
+---
+
+## 🛡️ 三、 安装依赖包（防坑必看！）
+
+**🔥 核心痛点**：有时候 `which python` 是对的，但 `which pip` 却指向了系统全局（比如被 `pyenv` 拦截），导致直接 `pip install` 会把包错误地装到系统环境里。
+
+**🌟 标准动作（终极防坑绝招）**：
+在虚拟环境中，**永远不要直接用 `pip install`，而是加上 `python -m` 前缀！**
+
+```bash
+# 完美安装命令，绝对不会装歪！
+python -m pip install requests          # 安装单个包
+python -m pip install numpy pandas      # 安装多个包
+python -m pip install -r requirements.txt # 根据列表批量安装
+```
+*原理解析：只要 `which python` 的路径是对的，`python -m pip` 就会强制使用虚拟环境肚子里的 pip，百分百装在 `.venv` 里。*
+
+---
+
+## 🚪 四、 退出虚拟环境
+
+无论 Linux 还是 Windows，退出命令均相同：
 ```bash
 deactivate
 ```
-
----
-## 🪟 二、Windows 下的操作
-
-Windows 下通常使用 PowerShell 或 CMD，激活脚本存放在虚拟环境的 `Scripts\` 目录下。
-
-### 1. 创建虚拟环境
-```powershell
-python -m venv .venv
-```
-*(如果提示找不到 python，请确保在安装 Python 时勾选了 "Add Python to PATH")*
-
-### 2. 激活虚拟环境
-
-Windows 有两种常见的命令行工具，激活命令略有不同：
-
-**👉 情况 A：如果你使用的是 PowerShell (Win10/11 默认终端)**
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-**👉 情况 B：如果你使用的是传统的 CMD (命令提示符)**
-```cmd
-.venv\Scripts\activate.bat
-```
-*(激活成功后，命令行开头同样会出现 `(.venv)` 提示符)*
-
-### 3. 退出虚拟环境
-```powershell
-deactivate
-```
-
----
-
-## ⚠️ Windows 下常见报错及解决办法
-
-### ❌ 报错："在此系统上禁止运行脚本 (Execution_Policies)"
-在 Windows 的 **PowerShell** 中首次激活虚拟环境时，90% 的人会遇到大红字的报错，提示系统禁止运行脚本。这是 Windows 的安全策略导致的。
-
-**✅ 解决办法：**
-1. 仍然在 PowerShell 中，执行以下命令：
-   ```powershell
-   Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-   ```
-2. 系统会问你是否更改策略，输入 `Y` 并按回车确认。
-3. 重新执行激活命令 `.\.venv\Scripts\Activate.ps1`，即可成功。
-   *(这个设置是永久生效的，以后在这台电脑上激活任何虚拟环境都不会再报错了。)*
 ```
