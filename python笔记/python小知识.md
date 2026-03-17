@@ -1,12 +1,4 @@
 
-
-
-这里为你整理了一份结构清晰的 Markdown 格式笔记，你可以直接点击右上角的“复制”按钮，粘贴到你的 Typora、Obsidian 或其他笔记软件中。
-
-我已经把 **“如何切换 Python 版本”** 的技巧作为重点补充到了各个方法中。
-
-***
-
 # WSL 环境下安装与切换 Python 3.12.10 版本指南
 
 > **⚠️ 核心警告：绝对不要卸载或覆盖系统自带的 Python 3.10.12！**
@@ -67,3 +59,83 @@ pyenv install 3.12.10
 
 ---
 
+
+# 🐧 Linux (WSL) vs 🪟 Windows：Python 虚拟环境对比指南
+
+> **💡 核心要点：**
+> 无论什么系统，推荐的虚拟环境文件夹名称统一为 `.venv`（注意前面有个点）。
+> 核心模块都是内置的 `venv`，区别主要在于系统的终端路径和脚本调用方式。
+
+---
+
+## 🐧 一、Linux / macOS (包括 WSL) 下的操作
+
+Linux 和 macOS 使用基于 Bash/Zsh 的终端，激活脚本存放在虚拟环境的 `bin/` 目录下。
+
+### 1. 创建虚拟环境
+```bash
+# 默认写法
+python -m venv .venv
+
+# 如果你的系统需要区分 python2 和 python3，请用：
+python3 -m venv .venv
+
+
+### 2. 激活虚拟环境
+```bash
+source .venv/bin/activate
+```
+*(激活成功后，命令行开头会出现 `(.venv)` 提示符)*
+
+### 3. 退出虚拟环境
+```bash
+deactivate
+```
+
+---
+## 🪟 二、Windows 下的操作
+
+Windows 下通常使用 PowerShell 或 CMD，激活脚本存放在虚拟环境的 `Scripts\` 目录下。
+
+### 1. 创建虚拟环境
+```powershell
+python -m venv .venv
+```
+*(如果提示找不到 python，请确保在安装 Python 时勾选了 "Add Python to PATH")*
+
+### 2. 激活虚拟环境
+
+Windows 有两种常见的命令行工具，激活命令略有不同：
+
+**👉 情况 A：如果你使用的是 PowerShell (Win10/11 默认终端)**
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+**👉 情况 B：如果你使用的是传统的 CMD (命令提示符)**
+```cmd
+.venv\Scripts\activate.bat
+```
+*(激活成功后，命令行开头同样会出现 `(.venv)` 提示符)*
+
+### 3. 退出虚拟环境
+```powershell
+deactivate
+```
+
+---
+
+## ⚠️ Windows 下常见报错及解决办法
+
+### ❌ 报错："在此系统上禁止运行脚本 (Execution_Policies)"
+在 Windows 的 **PowerShell** 中首次激活虚拟环境时，90% 的人会遇到大红字的报错，提示系统禁止运行脚本。这是 Windows 的安全策略导致的。
+
+**✅ 解决办法：**
+1. 仍然在 PowerShell 中，执行以下命令：
+   ```powershell
+   Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+   ```
+2. 系统会问你是否更改策略，输入 `Y` 并按回车确认。
+3. 重新执行激活命令 `.\.venv\Scripts\Activate.ps1`，即可成功。
+   *(这个设置是永久生效的，以后在这台电脑上激活任何虚拟环境都不会再报错了。)*
+```
