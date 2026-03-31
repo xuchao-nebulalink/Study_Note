@@ -19,7 +19,7 @@ Docker 是一个**容器化运行环境**。
 - **Network（网络）**：容器之间通信
 - **Docker Engine**：Docker 后台服务
 - **Docker Compose**：多容器编排工具，通常写在 `compose.yaml`
-
+![[Pasted image 20260331103534.png]]
 ---
 
 ## 2. 安装前先确认
