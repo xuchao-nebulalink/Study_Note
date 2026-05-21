@@ -55,7 +55,7 @@ Host gitee.com
   IdentityFile ~/.ssh/id_rsa_gitee
   IdentitiesOnly yes
 ```
-
+linux不需要下面操作
 ### 步骤 4：启动 SSH 代理并添加密钥
 
 在 Git Bash 中启动 `ssh-agent` 并将私钥添加进去。
