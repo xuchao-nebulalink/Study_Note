@@ -658,9 +658,9 @@ dns:
 proxies:
   - name: "xc机场-pc"
     type: vless
-    server: 你的服务器IP
+    server: 70.39.179.224
     port: 443
-    uuid: 你的UUID
+    uuid: 40e6bdae-4b34-4073-9726-d3c70803a729
     network: tcp
     udp: true
     tls: true
@@ -668,8 +668,8 @@ proxies:
     servername: www.microsoft.com
     client-fingerprint: chrome
     reality-opts:
-      public-key: 你的PublicKey
-      short-id: 你的ShortID
+      public-key: aerSrMHB2vWdS_9IpaiL3M-8Wgry4jW-x7ZQLrp8R08
+      short-id: 23dd3d
       spider-x: "/"
 
 proxy-groups:
