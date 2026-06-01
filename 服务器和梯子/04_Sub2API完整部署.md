@@ -234,3 +234,170 @@ docker compose -f docker-compose.local.yml logs -f postgres
 ```
 
 如果升级前没备份，别执行 `down -v`，否则数据可能没了。
+
+
+
+# Sub2API 端口冲突处理笔记
+
+## 问题现象
+
+`sub2api` 容器一直 `Restarting` 或启动失败，`docker compose ps` 里没有显示端口。
+
+日志/报错类似：
+
+```bash
+Bind for 127.0.0.1:8081 failed: port is already allocated
+```
+
+查看端口：
+
+```bash
+sudo ss -lntp | grep 8081
+```
+
+发现 `8081` 已经被 Caddy 占用。
+
+---
+
+## 原因
+
+Docker 端口映射格式：
+
+```bash
+宿主机端口:容器内部端口
+```
+
+Sub2API 容器内部监听的是 `8080`：
+
+```yaml
+SERVER_PORT=8080
+```
+
+所以不要写：
+
+```yaml
+127.0.0.1:7788:7788
+```
+
+除非容器内部也改成监听 `7788`。
+
+正确写法是：
+
+```yaml
+127.0.0.1:7788:8080
+```
+
+意思是：
+
+```text
+宿主机 7788  ->  容器内部 8080
+```
+
+---
+
+## 推荐改法
+
+进入目录：
+
+```bash
+cd /opt/sub2api
+sudo nano docker-compose.yml
+```
+
+找到：
+
+```yaml
+ports:
+  - "127.0.0.1:8081:8080"
+```
+
+改成：
+
+```yaml
+ports:
+  - "127.0.0.1:7788:8080"
+```
+
+---
+
+## 重启 Sub2API
+
+```bash
+cd /opt/sub2api
+sudo docker compose down
+sudo docker compose up -d --force-recreate
+sudo docker compose ps
+```
+
+测试：
+
+```bash
+curl -I http://127.0.0.1:7788
+```
+
+正常会看到：
+
+```bash
+127.0.0.1:7788->8080/tcp
+```
+
+---
+
+## Caddy 转发写法
+
+如果想用服务器 IP 的 `8081` 访问，就让 Caddy 占用 `8081`，再反代到 Sub2API 的 `7788`。
+
+编辑 Caddyfile：
+
+```bash
+sudo nano /etc/caddy/Caddyfile
+```
+
+添加或修改：
+
+```caddy
+:8081 {
+    reverse_proxy 127.0.0.1:7788
+}
+```
+
+检查并重载：
+
+```bash
+sudo caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+```
+
+访问：
+
+```text
+http://服务器IP:8081
+```
+
+---
+
+## 最终逻辑
+
+```text
+浏览器访问 服务器IP:8081
+        ↓
+Caddy
+        ↓
+127.0.0.1:7788
+        ↓
+Sub2API 容器内部 8080
+```
+
+---
+
+## 重点记住
+
+```yaml
+推荐：
+127.0.0.1:7788:8080
+
+不推荐：
+127.0.0.1:7788:7788
+```
+
+因为 Sub2API 容器内部默认监听的是 `8080`。
