@@ -94,20 +94,20 @@ Caddy 反代到 127.0.0.1:8081
 
 ```bash
 cd /opt/projects/sub2api
-docker compose -f docker-compose.local.yml up -d
-docker compose -f docker-compose.local.yml ps
+docker compose -f docker-compose.yml up -d
+sudo docker compose ps
 ```
 
 看日志：
 
 ```bash
-docker compose -f docker-compose.local.yml logs -f sub2api
+docker compose -f docker-compose.yml logs -f sub2api
 ```
 
 如果你没设置管理员密码，查自动生成密码：
 
 ```bash
-docker compose -f docker-compose.local.yml logs sub2api | grep "admin password"
+docker compose -f docker-compose.yml logs sub2api | grep "admin password"
 ```
 
 本机测试：
@@ -134,7 +134,7 @@ sub2api.xcwindfall.top {
 重载：
 
 ```bash
-sudo caddy validate --config /etc/caddy/Caddyfile
+sudo caddy validate --config /etc/caddy/Caddyfile   //作用以管理员权限验证 Caddy 配置文件的语法和逻辑是否正确，但不会实际应用或重启服务
 sudo systemctl reload caddy
 ```
 
