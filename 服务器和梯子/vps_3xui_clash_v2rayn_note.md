@@ -420,6 +420,8 @@ Short IDs：23dd3d 或自己生成一个
 SpiderX：/
 ```
 
+![[Pasted image 20260624230631.png]]
+![[Pasted image 20260624230556.png]]
 建议 Short ID 简单用一个就行，例如：
 
 ```text
