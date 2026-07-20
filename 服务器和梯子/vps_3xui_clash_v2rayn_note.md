@@ -975,7 +975,7 @@ Clash Verge Rev：
 
 ---
 
-## 17. 我的建议
+## 17. 我的建议和遇到问题
 
 第一次部署：
 
@@ -990,3 +990,68 @@ Clash Verge Rev：
 v2rayN 更省事
 Clash Verge 对 YAML 和 Mihomo 内核版本要求更严格
 ```
+
+
+### Clash Verge 连接 VLESS Reality 一直 Timeout
+
+**现象：**
+
+- 同一个 VLESS Reality 节点，v2rayN 可以正常使用。
+    
+- Clash Verge Rev 导入后一直显示 `Timeout`。
+    
+- YAML 参数确认无误。
+    
+
+**原因：**
+
+服务器使用的 **Xray Core 26.7.11** 与 Clash Verge 使用的 **Mihomo Reality** 存在兼容问题，导致 Reality 握手失败。
+
+**解决方法：**
+
+1. 将服务器 Xray Core 从 `26.7.11` 降级到 `26.6.27`。
+    
+2. 重启 3x-ui：
+    
+
+```bash
+sudo systemctl restart x-ui
+```
+
+3. 确认版本：
+    
+
+```bash
+/usr/local/x-ui/bin/xray-linux-amd64 version
+```
+
+应显示：
+
+```text
+Xray 26.6.27
+```
+
+4. 删除 Clash Verge 中的旧配置，彻底退出并重新打开。
+    
+5. 重新导入正确的 YAML 配置并测试。
+    
+
+**关键节点参数：**
+
+```yaml
+type: vless
+server: 70.39.179.44
+port: 443
+uuid: 4d60fdbd-d830-41e7-8554-ecb162bdd95f
+network: tcp
+tls: true
+servername: www.apple.com
+client-fingerprint: chrome
+reality-opts:
+  public-key: 7w4EErsXoT3GA6hmQScts0AHt7EFXI1xjfT-Z4X7sDc
+  short-id: "17"
+```
+
+**结论：**
+
+不是节点本身或 YAML 格式问题，主要是 **Xray 26.7.11 与 Mihomo Reality 的兼容问题**，降级到 `26.6.27` 后解决。
