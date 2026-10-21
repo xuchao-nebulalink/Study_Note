@@ -1,16 +1,24 @@
 # 操作系统杂项
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Obsidian 易变UI/缓存
+# Obsidian 易变UI/缓存（各电脑独立保存）
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
-.obsidian/app.json
-.obsidian/appearance.json
 .obsidian/cache/
 
 # Obsidian 回收站
 .trash/
 
-# 插件可能存放令牌/密钥（避免把API Key提交上去）
+# 普通 Obsidian 设置、插件安装文件和启用列表均同步。
+# 插件配置默认不提交：可能包含令牌、密钥或本机路径。
 .obsidian/plugins/*/data.json
+
+# Git 插件的通用同步设置已检查，可跨电脑共享。
+# 登录凭据、Git 可执行文件路径等由该插件另存于本机。
+!.obsidian/plugins/obsidian-git/data.json
+
+# Git 插件生成的认证交互文件/脚本，不应跨电脑同步。
+.obsidian/plugins/obsidian-git/git_credentials_input*
+.obsidian/plugins/obsidian-git/obsidian_askpass.sh
