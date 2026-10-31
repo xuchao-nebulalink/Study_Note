@@ -50,11 +50,12 @@ brew --version
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Apple 芯片 Mac 默认安装到 `/opt/homebrew`。新装完成后，按安装程序的 `Next steps` 提示配置路径；默认 zsh 环境通常执行下面两行。第一行只需添加一次，不要反复追加：[Homebrew 官方安装说明](https://brew.sh/)
+Apple 芯片 Mac 默认安装到 `/opt/homebrew`。新装完成后，按安装程序的 `Next steps` 提示配置路径；默认 zsh 环境通常执行下面三行。前两行只需执行一次，第三行使配置在当前终端生效：[Homebrew 官方安装说明](https://brew.sh/)
 
 ```bash
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-eval "$(/opt/homebrew/bin/brew shellenv)"
+echo >> /Users/xuchao/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> /Users/xuchao/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 ```
 
 再次运行 `brew --version`，能显示版本即可。

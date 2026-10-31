@@ -1,7 +1,7 @@
 
 # Windows 11 Git 多平台 SSH 配置指南
 
-本指南用于在同一台电脑上为 GitHub、GitLab、Gitee 配置独立的 SSH 密钥，并为不同项目设置不同的用户名。
+本指南用于在 Windows 11 的 Git Bash 中为 GitHub、GitLab、Gitee 配置独立的 SSH 密钥。三个平台共用提交者姓名 `xuchao-nebulalink` 和邮箱 `xcwindfall@163.com`，全局设置一次即可。
 
 ### 步骤 1：为各平台生成 SSH 密钥
 
@@ -55,21 +55,21 @@ Host gitee.com
   IdentityFile ~/.ssh/id_rsa_gitee
   IdentitiesOnly yes
 ```
-linux不需要下面操作
+
 ### 步骤 4：启动 SSH 代理并添加密钥
 
-在 Git Bash 中启动 `ssh-agent` 并将私钥添加进去。
+本文使用 Git Bash 自带的 SSH 与 `ssh-agent`。密钥没有口令、且 `config` 已指定 `IdentityFile` 时，可以直接连接；需要把密钥加入代理时，按下面操作。Linux 是否需要代理同样取决于密钥和会话配置，不能一概省略。
 
 ```bash
-# 启动代理 (如果遇到 'Could not open a connection' 错误，执行此命令)
-eval $(ssh-agent -s)
+# 当前终端没有可用代理，或提示 'Could not open a connection' 时执行
+eval "$(ssh-agent -s)"
 
 # 添加所有私钥到代理
 ssh-add ~/.ssh/id_rsa_github
 ssh-add ~/.ssh/id_rsa_gitlab
 ssh-add ~/.ssh/id_rsa_gitee
 ```
-> **提示**: 为了让 `ssh-agent` 开机自启，可以在 Windows 服务 (`services.msc`) 中找到 `OpenSSH Authentication Agent`，将其启动类型设为“自动”。
+Windows 的 `OpenSSH Authentication Agent` 系统服务与 Git Bash 自带的代理可能属于两套实现。开启系统服务，不会自动让 Git Bash 使用该服务。本节统一使用 Git Bash 的代理；重新打开终端后，如需使用代理，应检查当前会话是否仍能连接。[GitHub 官方说明](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=windows)
 
 ### 步骤 5：测试连接
 
@@ -82,26 +82,23 @@ ssh -T git@gitee.com
 ```
 如果看到包含你对应用户名的欢迎信息，则表示配置成功。
 
-### 步骤 6：配置 Git 用户信息（这个可以只配置一个即可）
+### 步骤 6：配置三个平台共用的 Git 用户信息
 
-为确保提交记录的作者信息正确，推荐在每个项目中单独设置用户名。
+三个平台共用同一套提交身份，保留全局姓名和邮箱，未来新仓库会自动继承。`user.name` 是提交记录显示的姓名，不必等于平台账号名。[GitHub 官方说明](https://docs.github.com/en/get-started/git-basics/setting-your-username-in-git)
 
 ```bash
-# 1. (可选) 设置全局邮箱，因为你的邮箱都一样
-git config --global user.email "your_email@example.com"
-
-# 2. 清除全局用户名设置 (避免混淆)
-git config --global --unset user.name
-
-# 3. 进入你的项目目录，为项目单独设置用户名
-# 例如，在一个 GitHub 项目中：
-cd /path/to/your/github_project
-git config user.name "YourGitHubUsername"
-
-# 在一个 GitLab 项目中：
-cd /path/to/your/gitlab_project
-git config user.name "YourGitLabUsername"
+git config --global user.name "xuchao-nebulalink"
+git config --global user.email "xcwindfall@163.com"
 ```
+
+检查配置：
+
+```bash
+git config --global user.name
+git config --global user.email
+```
+
+如果未来某个项目确实需要不同的提交身份，再进入那个仓库设置局部姓名或邮箱；仓库级设置会覆盖全局设置。
 
 ---
 
